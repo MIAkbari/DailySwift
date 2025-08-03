@@ -6,3 +6,256 @@
 //
 
 import Foundation
+
+func collectionCustomMap() {
+    // The Fibonancci Numbers
+    let fibs = [0,1,1,2,3,5]
+    
+    var squared: [Int] = []
+    // out Map
+    for fib in fibs {
+        squared.append(fib * fib)
+    }
+    print(squared)
+    
+    // with map
+    
+    let squ = fibs.map { fib in fib * fib}
+    
+    print(squ)
+    
+    // with custom map
+    // The map method isn't hard to write???
+    
+    
+    
+    let customMap = fibs.customMap {$0 * $0}
+    
+    print(customMap)
+    
+    // Like and sub me - TNX
+    
+}
+
+extension Array {
+    func customMap<T>(_ transform: (Element) -> T) -> [T] {
+        var result: [T] = []
+        result.reserveCapacity(count)
+        
+        self.forEach { element in
+            result.append(transform(element))
+        }
+        
+        return result
+    }
+    
+    func customSplit(where condition: (Element, Element) -> Bool) -> [[Element]] {
+        var result: [[Element]] = self.isEmpty ? [] : [[self[0]]]
+        
+        zip(self, self.dropFirst())
+            .forEach { prev, curr in
+                if condition(prev, curr) {
+                    result.append([curr])
+                } else {
+                    result[result.endIndex-1].append(curr)
+                }
+            }
+        return result
+    }
+}
+
+
+
+
+func collection() {
+    
+    let array: [Int] = [1, 2, 2, 2, 3, 4, 4, 6,6 , 5, 5]
+    //        .sorted(by: <)
+    //        .customMap({$0 * $0})
+    //
+    //    var result: [[Int]] = array.isEmpty ? [] : [[array[0]]]
+    //
+    //    zip(array,
+    //        array.dropFirst())
+    //    .forEach { prev, curr in
+    //        if prev == curr {
+    //            result[result.endIndex-1].append(curr)
+    //        } else {
+    //            result.append([curr])
+    //        }
+    //    }
+    //
+    let result = array.customSplit { $0 != $1 }
+    let resultVersion2 = array.customSplit(where: !=)
+    print(result)
+    print(resultVersion2)
+}
+
+func hightOrderFunctions() {
+    let numbers = [10, 20, 30, 40, 30, 50]
+    //[ 0,  1,  2,  3,  4,  5]
+    if let indexWhere = numbers.firstIndex(where: {$0 > 35}) {
+        print(indexWhere)
+    }
+    
+    if let lastIndexWhere = numbers.lastIndex(where: {$0 > 35}) {
+        print(lastIndexWhere)
+    }
+    
+    let indexOf = numbers.firstIndex(of: 30)
+    print(indexOf)
+    
+    let firstWhere = numbers.first(where: {$0 > 25})
+    print(firstWhere)
+    
+    let lastWhere = numbers.last(where: {$0 > 35})
+    print(lastWhere)
+    
+    // Contains
+    let containsElement = numbers.contains(where: {$0 < 5})
+    print(containsElement)
+    
+    
+    let data = ["ab", "ab", "abcd", "fd", "fd", "ac", "acd"]
+    
+    var dataResult: [[String]] = data.isEmpty ? [] : [[data[0]]]
+    
+    zip(data, data.dropFirst())
+        .forEach { pre, cur in
+            if pre == cur {
+                dataResult[dataResult.endIndex-1].append(cur)
+            } else {
+                dataResult.append([cur])
+            }
+        }
+    print(dataResult)
+//    var result = data.customSplit(where: !=)
+//    print(result)
+    
+    let suits = ["♠", "♥", "♣", "♦"]
+    let ranks = ["J", "Q", "K", "A"]
+    
+    _ = suits.flatMap { sui in
+        ranks.map { rank in
+            let final = (sui, rank)
+            print(final)
+        }
+    }
+    
+    let dataPlus = [1,2,3,4]//.accmulate(0, +) //.reduce(0, +)
+    var resultData = 0
+    
+    let accmulate = dataPlus.map { element in
+        resultData = resultData + element
+        return resultData
+    }
+    print(accmulate)
+
+    let letters = ["A", "B", "C"]//.accmulate("", +)
+    
+    var resultLetters = ""
+    let lettersAccumlate = letters.map { element in
+        resultLetters = resultLetters + element
+        return resultLetters
+    }
+    print(lettersAccumlate)
+}
+
+extension Array {
+    func accmulate<T>(_ initResult: T,
+                      _ nextPartialResult: (T, Element) -> T)
+    -> [T] {
+        var result = initResult
+        let accmulate = map { next in
+            result = nextPartialResult(result, next)
+            return result
+        }
+        return accmulate
+    }
+    
+    func customFilter(_ isIncluded: (Element) -> Bool) -> [Element] {
+        var result: [Element] = []
+        for x in self where isIncluded(x) {
+            result.append(x)
+        }
+        return result
+    }
+    
+    func customFlatMap<T>(_ transform: (Element) -> [T]) -> [T]{
+        var result: [T] = []
+        
+        for x in self {
+            result.append(contentsOf: transform(x))
+        }
+        return result
+    }
+    
+    func customReduce<Result>(_ initResult: Result, _ nextPartialResult: (Result, Element) -> Result) -> Result {
+        var result = initResult
+        for x in self {
+            result = nextPartialResult(result, x)
+        }
+        return result
+    }
+}
+
+extension Array where Element: Equatable {
+    
+    func customFirstindex(of element: Element) -> Int? {
+        for idx in self.indices where self[idx] == element {
+            return idx
+        }
+        return nil
+    }
+}
+
+
+func filterFunc() {
+    let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    
+    var result: [Int] = []
+    for element in nums where element % 2 == 0 {
+        result.append(element)
+    }
+    print(nums.customFilter({$0 % 2 == 0}))
+    print(result)
+    
+    let fibs = [0, 1, 1, 2, 3, 5]
+    var resultFibs = 0
+    
+    let acc = fibs.map { element in
+        resultFibs = resultFibs + element
+        return resultFibs
+    }
+    
+    print(acc)
+    
+    resultFibs = 0
+    fibs.forEach { element in
+        resultFibs = resultFibs + element
+    }
+    
+    print(resultFibs)
+    print(fibs.customReduce(0, +))
+    
+    //
+    let slice = [1...]
+    
+    print(slice)
+}
+
+func dictionaryMethod() {
+    
+    var data: [String: String] = [:]
+    
+    data["name"] = "mohammad"
+    data["family"] = "akbari"
+    
+    data.updateValue("tehran", forKey: "city")
+    var finalData: [String: String] = [:]
+    finalData["village"] = "sefidar"
+    
+    let merge = data.merging(finalData, uniquingKeysWith: {$1})
+    
+    print(merge)
+}
