@@ -258,4 +258,33 @@ func dictionaryMethod() {
     let merge = data.merging(finalData, uniquingKeysWith: {$1})
     
     print(merge)
+    
+    let frequencies = "hellooo"
+    let arr = Array(frequencies)
+    
+    let split = arr.customSplit(where: !=)
+    let sp = split.map {($0, $0.count)}
+    
+    let fre = frequencies.map{($0,1)}
+    let dic = Dictionary(fre, uniquingKeysWith: +)
+    
+    print(dic)
+    print(frequencies.frequencies.filter({$0.value > 2}))
+    print(arr.customFrequencies)
+}
+
+
+extension Sequence where Element: Hashable {
+    var frequencies: [Element: Int] {
+        let frequenciesPairs = self.map {($0, 1)}
+        return Dictionary(frequenciesPairs, uniquingKeysWith: +)
+    }
+}
+
+extension Array where Element: Equatable {
+    var customFrequencies:[([Element], Int)] {
+        let fre = self.customSplit(where: !=)
+        let frequenciesPairs = fre.map {($0, $0.count)}
+        return frequenciesPairs
+    }
 }
