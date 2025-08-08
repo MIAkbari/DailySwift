@@ -273,7 +273,6 @@ func dictionaryMethod() {
     print(arr.customFrequencies)
 }
 
-
 extension Sequence where Element: Hashable {
     var frequencies: [Element: Int] {
         let frequenciesPairs = self.map {($0, 1)}
@@ -288,3 +287,71 @@ extension Array where Element: Equatable {
         return frequenciesPairs
     }
 }
+
+
+func checkSet() {
+    let iPods: Set = ["iPod touch", "iPod nano", "iPod mini",
+    "iPod shuffle", "iPod classic"]
+    let discontinuedIPods: Set = ["iPod mini", "iPod classic",
+    "iPod nano", "iPod shuffle"]
+    
+    let check = iPods.subtracting(discontinuedIPods) // iPod touch
+    
+    let touchscreen: Set = ["iPhone", "iPad", "iPod touch", "iPod nano"]
+    
+    let inter = iPods.intersection(touchscreen) // "iPod touch", "iPod nano"
+    
+    var discontinued: Set = ["iBook", "PowerBook", "Power Mac"]
+    
+    discontinued.formUnion(discontinuedIPods) // "iPod classic", "Power Mac", "iPod nano", "iPod shuffle", "iBook", "iPod mini", "PowerBook"
+    
+  _ = [1,2,3,12,1,3,4,5,6,4,6]//.unique() // [1, 2, 3, 12, 4, 5, 6]
+}
+
+
+extension Sequence where Element: Hashable {
+//    func unique() -> [Element] {
+//        var result: Set<Element> = []
+//        
+//        let filter = self.filter { element in
+//            if result.contains(element) {
+//                return false
+//            } else {
+//                result.insert(element)
+//                return true
+//            }
+//        }
+//        
+//        return filter
+//    }
+    
+    func toArray() -> [Element] {
+        Array(self)
+    }
+}
+
+func rangeOfSwift() {
+    let base = 0...10
+    print(base.toArray())
+    
+    let lowercaseLetters = Character("a")...Character("z")
+    print(lowercaseLetters)
+    
+    let fromA: PartialRangeFrom<Character> = Character("a")...
+    let throughZ: PartialRangeThrough<Character> = ...Character("z")
+    let upto10: PartialRangeUpTo<Int> = ..<10
+    
+    print(fromA)
+    print(throughZ)
+    print(upto10)
+    
+    let numbers = [1,2,3,4]
+    numbers[2...] // [3, 4]
+    numbers[..<1] // [1]
+    numbers[1...2] // [2, 3]
+    
+    let num = numbers[...]
+    
+    print(num)
+}
+
