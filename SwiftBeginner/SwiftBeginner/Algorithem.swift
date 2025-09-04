@@ -91,3 +91,36 @@ import Foundation
 //print(reResult)
 //
 //let lettersss = "abcabcbb"
+
+//func towNumberPointer(_ nums: [Int], target: Int) -> (Int, Int)? {
+//    var left = 0
+//    var right = nums.count - 1
+//
+//    while left < right {
+//        let sum = nums[left] + nums[right]
+//
+//        if sum == target {
+//            return (-nums.index(before: left), nums.index(after: right))
+//        } else if sum < target {
+//            left += 1
+//        } else {
+//            right -= 1
+//        }
+//    }
+//    return nil
+//}
+//
+//print(towNumberPointer([2, 7, 11, 15], target: 9  ))
+
+func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {
+    let sortedArray = (nums1 + nums2).sorted()
+    let count = sortedArray.count
+    
+    if count % 2 == 1 {
+        return Double(sortedArray[count / 2])
+    } else {
+        let middle1 = Double(sortedArray[count / 2])
+        let middle2 = Double(sortedArray[(count / 2) - 1])
+        return Double(middle1 + middle2) / 2.0
+    }
+}
